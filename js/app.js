@@ -11,10 +11,10 @@ const snake = new Snake(matrix, 10, 10, 'right')
 const gameplay = new Audio('/audio/gameplay.mp3')
 const gameover = new Audio('/audio/gameover.mp3')
 gameplay.loop = true
-gameplay.volume = 0.9
-// gameover.loop = true
-gameover.volume = 0.9
+gameplay.volume = 1
+gameover.volume = 1
 
+//Matrix
 matrix.create()
 matrix.render()
 window.addEventListener('resize', function () {
@@ -33,16 +33,19 @@ window.addEventListener('resize', function () {
 
 // matrix.setCell(1, 2, 'fruit')
 
+//Snake
 snake.render()
 
-window.addEventListener('click', function () {
+
+//Gameplay
+startBtn.addEventListener('click', function () {
     let gameInterval = setInterval(() => {
         snake.move()
         if (snake.alive === false) {
             clearInterval(gameInterval)
+            matrix.gameOverAnimation()
             gameplay.pause()
             gameover.play()
-            // alert('GAME OVER!')
         }
     }, 500)
 

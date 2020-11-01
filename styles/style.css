@@ -27,7 +27,8 @@ body {
   align-items: center;
 }
 
-.startBtn {
+.startBtn,
+.startNewGameBtn {
   border: none !important;
   background-color: #9ccc65 !important;
   color: #3f51b5;
@@ -37,6 +38,10 @@ body {
 .bg {
   display: block;
   width: 100%;
+}
+
+.animTarget-anim {
+  background-color: #795548;
 }
 
 @media screen and (max-width: 1200px) {
