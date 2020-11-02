@@ -9,10 +9,14 @@ const matrix = new Matrix(gameField)
 const snake = new Snake(matrix, 10, 10, 'right')
 
 const gameplay = new Audio('/audio/gameplay.mp3')
+document.querySelector('#gameplay').innerHTML = '<audio><source src="/audio/gameplay.mp3"></audio>'
 const gameover = new Audio('/audio/gameover.mp3')
+document.querySelector('#gameover').innerHTML = '<audio><source src="/audio/gameover.mp3"></audio>'
 gameplay.loop = true
 gameplay.volume = 1
 gameover.volume = 1
+
+
 
 //Matrix
 matrix.create()
