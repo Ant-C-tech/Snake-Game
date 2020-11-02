@@ -1,6 +1,8 @@
 'use strict'
+
 import Matrix from './matrix.js'
 import Snake from './snake.js'
+import PopUp from './popUp.js'
 
 const gameField = document.querySelector('.field')
 const startBtn = document.querySelector('.startBtn')
@@ -10,13 +12,12 @@ const snake = new Snake(matrix, 10, 10, 'right')
 
 const gameplay = new Audio('https://ant-c-tech.github.io/Snake-Game/audio/gameplay.mp3')
 document.querySelector('#gameplay').innerHTML = '<audio><source src="https://ant-c-tech.github.io/Snake-Game/audio/gameplay.mp3"></audio>'
-const gameover = new Audio('https://ant-c-tech.github.io/Snake-Game/audio/gameover.mp3')
-document.querySelector('#gameover').innerHTML = '<audio><source src="https://ant-c-tech.github.io/Snake-Game/audio/gameover.mp3"></audio>'
 gameplay.loop = true
 gameplay.volume = 1
+
+const gameover = new Audio('https://ant-c-tech.github.io/Snake-Game/audio/gameover.mp3')
+document.querySelector('#gameover').innerHTML = '<audio><source src="https://ant-c-tech.github.io/Snake-Game/audio/gameover.mp3"></audio>'
 gameover.volume = 1
-
-
 
 //Matrix
 matrix.create()
@@ -37,8 +38,30 @@ window.addEventListener('resize', function () {
 
 // matrix.setCell(1, 2, 'fruit')
 
+
 //Snake
 snake.render()
+
+
+//Modal - Game Over
+const modal = new PopUp({
+    openBtn: 'openPopUp',
+    container: 'modalGameOver',
+    content: `<div class="animTarget-anim p-3 rounded mb-3">
+            <h1 class="text-light">Game Over</h1>
+            <button class="btn btn-primary startNewGameBtn" type="button">Start new game</button>
+        </div>`,
+    maskColor: `#d6e6f9`,
+    maskOpacity: '0.8',
+})
+
+window.addEventListener('load', () => {
+    modal.render()
+})
+
+window.addEventListener('resize', function () {
+    modal.resize()
+})
 
 
 //Gameplay
@@ -55,9 +78,6 @@ startBtn.addEventListener('click', function () {
 
     gameplay.play()
 }, { once: true })
-
-
-
 
 document.onkeydown = function (event) {
     switch (event.key) {
