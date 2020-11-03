@@ -40,8 +40,8 @@ body {
   width: 100%;
 }
 
-.animTarget-anim {
-  background-color: #795548;
+.gameOver__title {
+  color: #9ccc65;
 }
 
 @media screen and (max-width: 1200px) {

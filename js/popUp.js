@@ -4,127 +4,64 @@ export default class PopUp {
 
     constructor(obj) {
         this.obj = obj
-        this.openBtn = obj.openBtn
         this.container = obj.container
-        this.reloadBtn = obj.reload
         this.content = obj.content || 'NO CONTENT'
+        this.closeBtn = obj.closeBtn || false
         this.maskColor = obj.maskColor || '#343a40'
+        this.popupBgColor = obj.bgColor || '#FFFFFF'
         this.maskOpacity = obj.maskOpacity || '0.7'
 
-        this.popupMaskName = `${this.openBtn}-popupMask`
-        this.popupWindowName = `${this.openBtn}-popupWindow`
-        this.btnCloseName = `${this.openBtn}-popupClose`
+        this.popupMaskName = `${this.container}-popupMask`
+        this.popupWindowName = `${this.container}-popupWindow`
+        this.btnCloseName = `${this.container}-popupClose`
+
+        this.popupMask
+        this.popupWindow
     }
 
     render() {
         //Create and add elements to page:
         this.addPopupToPage()
 
-        // //Set main variables:
-        const popupMask = document.querySelector(`.${this.popupMaskName}`)
-        const popupWindow = document.querySelector(`.${this.popupWindowName}`)
+        // Set main variables:
+        this.popupMask = document.querySelector(`.${this.popupMaskName}`)
+        this.popupWindow = document.querySelector(`.${this.popupWindowName}`)
 
-        // // Styles for elements:
-        this.addStartStyleToMask(popupMask)
-        this.addStartStyleToPopupWindow(popupWindow)
+        //  Styles for elements:
+        this.addStartStyleToMask()
+        this.addStartStyleToPopupWindow()
 
-        // // Show popup buttons:
-        for (let item of document.querySelectorAll(`.${this.openBtn}`)) {
-            item.addEventListener('click', () => {
-                this.showPopup(popupMask, popupWindow)
+        if (this.closeBtn) {
+            let div = document.createElement('div')
+            div.innerHTML = `<div class="${this.btnCloseName} d-flex justify-content-center align-items-center border border-dark rounded-circle ml-auto mb-3" type="button" style="width: 30px; height: 30px; transition: transform ease-in-out 0.3s"><p class="mb-0" style="font-size:18px; font-family:'Montserrat', sans-serif;">&#10006</p></div>`
+            const closeBtnBlockTarget = document.querySelector(`.${this.container} .${this.popupWindowName} .row .col`)
+            closeBtnBlockTarget.prepend(div)
+
+            document.querySelector(`.${this.btnCloseName}`).addEventListener('click', () => {
+                this.hidePopup()
             })
-        }
 
+            document.querySelector(`.${this.btnCloseName}`).addEventListener('mouseover', btnAnimationOn)
+            document.querySelector(`.${this.btnCloseName}`).addEventListener('mouseout', btnAnimationOut)
 
-        // // Reload btn
-        if (this.reloadBtn) {
-            document.querySelector(`.${this.reloadBtn}`).addEventListener('click', () => {
-                for (let item of document.querySelectorAll(`.${this.openBtn}`)) {
-                    item.addEventListener('click', () => {
-                        this.showPopup(popupMask, popupWindow)
-                    })
-                }
-            })
-        }
-
-
-        // // Hide popup buttons:
-        document.querySelector(`.${this.btnCloseName}`).addEventListener('click', () => {
-            for (let item of document.querySelectorAll(`.${this.openBtn}`)) {
-                item.addEventListener('click', () => {
-                    this.showPopup(popupMask, popupWindow)
-                })
+            function btnAnimationOn() {
+                this.style.transform = 'rotate(180deg)'
             }
 
-            this.hidePopup(popupMask, popupWindow)
-        })
-        document.querySelector(`.${this.btnCloseName}`).addEventListener('mouseover', this.btnAnimationOn)
-        document.querySelector(`.${this.btnCloseName}`).addEventListener('mouseout', this.btnAnimationOut)
-
-    }
-
-    resize() {
-        const popupMask = document.querySelector(`.${this.popupMaskName}`)
-        const popupWindow = document.querySelector(`.${this.popupWindowName}`)
-
-        if (popupMask.style.display != 'none') {
-            const windowHeight = document.documentElement.clientHeight
-            const popupWindowHeight = popupWindow.offsetHeight
-
-            let popupWindowTop
-
-            if (windowHeight > popupWindowHeight) {
-                popupWindowTop = ((windowHeight - popupWindowHeight) / 2)
-            } else {
-                popupWindowTop = 0
-            }
-
-            if (popupWindowTop === 0) {
-                popupWindow.style.height = windowHeight - 10 + 'px'
-                popupWindow.style.top = popupWindowTop + 5 + 'px'
-                popupWindow.style.overflowY = 'scroll';
-            } else {
-                popupWindow.style.top = popupWindowTop + 5 + 'px'
-                popupWindow.style.overflowY = 'hidden';
+            function btnAnimationOut() {
+                this.style.transform = 'rotate(-180deg)'
             }
         }
 
     }
 
-    createPopupElements() {
-        return `<div class="${this.popupMaskName}"></div>
-                        <div class="container ${this.popupWindowName} shadow-lg text-center rounded pt-2 pr-2 pb-4 pl-2">
-                            <div class="row">
-                                <div class="col">
-                                    <div class="${this.btnCloseName} d-flex justify-content-center align-items-center border border-dark rounded-circle ml-auto mb-3" type="button" style="width: 30px; height: 30px; transition: transform ease-in-out 0.3s"><p class="mb-0" style="font-size:18px; font-family:'Montserrat', sans-serif;">&#10006</p></div>
-                                    ${this.content}
-                                </div>
-                            </div>
-                        </div>`
-    }
-
-    addPopupToPage() {
-        document.querySelector(`.${this.container}`).innerHTML = this.createPopupElements()
-    }
-
-    addStartStyleToMask(popupMask) {
-        const maskStyles = `position: fixed; width: 100%; height: 100%; top: 0px; left: 0px; z-index: 1000; transition: opacity ease-in-out 0.5s; background-color: ${this.maskColor}; opacity: 0; display: none;`
-        popupMask.setAttribute('style', maskStyles)
-    }
-
-    addStartStyleToPopupWindow(popupWindow) {
-        const popupStyles = 'position: fixed; left: 50%; transform:translateX(-50%); top: 3000px; z-index: 2000; background-color: #ffffff;  transition: top ease-in-out 0.5s; display: none; overflow-x: hidden;'
-        popupWindow.setAttribute('style', popupStyles)
-    }
-
-    showPopup(popupMask, popupWindow) {
-
+    showPopup() {
         const windowHeight = document.documentElement.clientHeight
 
         //Определяем высоту невидимого элемента:
-        popupWindow.style.display = 'block'
-        const popupWindowHeight = popupWindow.offsetHeight
-        popupWindow.style.display = 'none'
+        this.popupWindow.style.display = 'block'
+        const popupWindowHeight = this.popupWindow.offsetHeight
+        this.popupWindow.style.display = 'none'
 
         let popupWindowTop
 
@@ -135,20 +72,22 @@ export default class PopUp {
         }
 
         document.querySelector('body').style.overflow = 'hidden'
-        popupMask.style.display = 'block'
-        popupWindow.style.display = 'block'
+        this.popupMask.style.display = 'block'
+        this.popupWindow.style.display = 'block'
 
         if (popupWindowTop === 0) {
-            popupWindow.style.height = windowHeight - 10 + 'px'
-            popupWindow.style.top = popupWindowTop + 5 + 'px'
-            popupWindow.style.overflowY = 'scroll';
+            this.popupWindow.style.height = windowHeight - 10 + 'px'
+            this.popupWindow.style.top = popupWindowTop + 5 + 'px'
+            this.popupWindow.style.overflowY = 'scroll';
         } else {
-            popupWindow.style.overflowY = 'hidden';
+            this.popupWindow.style.overflowY = 'hidden';
         }
 
         const maskOpacity = this.maskOpacity
+        const popupMask = this.popupMask
+        const popupWindow = this.popupWindow
 
-        this.raf( //Асинхронная работа
+        _raf( //Асинхронная работа
             function () {
                 popupMask.style.opacity = maskOpacity
                 popupWindow.style.top = popupWindowTop + 5 + 'px'
@@ -157,19 +96,36 @@ export default class PopUp {
                 }
             }
         )
-
     }
 
+    resize() {
+        if (this.popupMask.style.display != 'none') {
+            const windowHeight = document.documentElement.clientHeight
+            const popupWindowHeight = this.popupWindow.offsetHeight
 
-    raf(fn) {
-        window.requestAnimationFrame(function () {
-            window.requestAnimationFrame(function () {
-                fn()
-            })
-        })
+            let popupWindowTop
+
+            if (windowHeight > popupWindowHeight) {
+                popupWindowTop = ((windowHeight - popupWindowHeight) / 2)
+            } else {
+                popupWindowTop = 0
+            }
+
+            if (popupWindowTop === 0) {
+                this.popupWindow.style.height = windowHeight - 10 + 'px'
+                this.popupWindow.style.top = popupWindowTop + 5 + 'px'
+                this.popupWindow.style.overflowY = 'scroll';
+            } else {
+                this.popupWindow.style.top = popupWindowTop + 5 + 'px'
+                this.popupWindow.style.overflowY = 'hidden';
+            }
+        }
     }
 
-    hidePopup(popupMask, popupWindow) {
+    hidePopup() {
+        const popupMask = this.popupMask
+        const popupWindow = this.popupWindow
+
         document.querySelector('body').style.overflow = 'auto'
         popupMask.addEventListener('transitionend', handlerMask)
         popupWindow.addEventListener('transitionend', handlerWindow)
@@ -187,13 +143,34 @@ export default class PopUp {
         }
     }
 
-    btnAnimationOn() {
-        this.style.transform = 'rotate(180deg)'
+    addPopupToPage() {
+        document.querySelector(`.${this.container}`).innerHTML = `<div class="${this.popupMaskName}"></div>
+                        <div class="container ${this.popupWindowName} shadow-lg text-center rounded pt-2 pr-2 pb-4 pl-2">
+                            <div class="row">
+                                <div class="col">
+                                    
+                                    ${this.content}
+                                </div>
+                            </div>
+                        </div>`
     }
 
-    btnAnimationOut() {
-        this.style.transform = 'rotate(-180deg)'
+    addStartStyleToMask() {
+        const maskStyles = `position: fixed; width: 100%; height: 100%; top: 0px; left: 0px; z-index: 1000; transition: opacity ease-in-out 0.5s; background-color: ${this.maskColor}; opacity: 0; display: none;`
+        this.popupMask.setAttribute('style', maskStyles)
     }
 
+    addStartStyleToPopupWindow() {
+        const popupStyles = `position: fixed; left: 50%; transform:translateX(-50%); top: 3000px; z-index: 2000; background-color: ${this.popupBgColor};  transition: top ease-in-out 0.5s; display: none; overflow-x: hidden;`
+        this.popupWindow.setAttribute('style', popupStyles)
+    }
 
+}
+
+function _raf(fn) {
+    window.requestAnimationFrame(function () {
+        window.requestAnimationFrame(function () {
+            fn()
+        })
+    })
 }
