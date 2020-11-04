@@ -2,19 +2,25 @@
 
 export default class Snake {
 
-    constructor(matrix, x, y, direction) {
+    constructor(matrix, direction) {
         this.matrix = matrix
-        this.x = x
-        this.y = y
-        this.direction = direction
-        this.alive = true
-        this.animationDirect = 270
+
+        this.direction
+        this.alive
+        this.x
+        this.y
+        this.animationDirect
+        this.explosionPoint
     }
 
 
 
     render() {
-        // this.matrix.setCell(this.x, this.y, 'snake')
+        this.direction = 'right'
+        this.alive = true
+        this.x = this.matrix.rows / 2
+        this.y = this.matrix.cols / 2
+        this.animationDirect = 270
 
         this.matrix.setCell(this.x, this.y, {
             name: 'snake',
@@ -52,6 +58,25 @@ export default class Snake {
         }
 
         if (!_isAlive(this.x, this.y, this.matrix.rows, this.matrix.cols)) {
+
+            switch (this.animationDirect) {
+                case 270: this.x--
+                    break
+                case 90: this.x++
+                    break
+                case 0: this.y--
+                    break
+                case 180: this.y++
+                    break
+            }
+
+            this.matrix.setCell(this.x, this.y, {
+                name: 'explosion',
+                src: 'img/shockwave.png',
+                alt: 'explosion',
+                direction: 0,
+            })
+
             this.alive = false
             return false
         }

@@ -10,12 +10,13 @@ let restartBtn
 
 //New modules
 const matrix = new Matrix(gameField)
-const snake = new Snake(matrix, 10, 10, 'right')
+const snake = new Snake(matrix)
 const modal = new PopUp({
     container: 'modalGameOver',
     content: `<div class="gameOver mb-3">
-            <h1 class="gameOver__title mb-3">Game Over</h1>
-            <button class="btn btn-primary startNewGameBtn" type="button">Start new game</button>
+            <h1 class="gameOver__title display-3">Game Over</h1>
+                    <img class="gameOver__img mb-1" src="img/emergency-truck.png" alt="emergency-truck">
+            <button class="btn btn-primary startNewGameBtn" type="button">Play new game</button>
         </div>`,
     maskColor: `#d6e6f9`,
     maskOpacity: '0.01',
@@ -32,7 +33,12 @@ document.querySelector('#gameover').innerHTML = '<audio><source src="https://ant
 gameover.volume = 0.4
 
 
-createNewSnakeGame()
+//=====================  Gameplay  ===========================
+// Game elements
+createNewField()
+snake.render()
+
+// Game control
 document.onkeydown = function (event) {
     switch (event.key) {
         case 'ArrowRight':
@@ -50,40 +56,36 @@ document.onkeydown = function (event) {
     }
 }
 startBtn.addEventListener('click', startGame, { once: true })
+modal.render()
+restartBtn = document.querySelector('.startNewGameBtn')
+restartBtn.addEventListener('click', function () {
+    gameover.pause()
+    gameover.currentTime = 0
+    modal.hidePopup()
+    reCreateNewField()
+    snake.render()
+    startBtn.addEventListener('click', startGame, { once: true })
+})
+
+//Resize
+window.addEventListener('resize', function () {
+    if (window.innerWidth > 768) {
+        document.querySelector('.wrapper').classList.add('container')
+        document.querySelector('.wrapper').classList.remove('container-fluid')
+        matrix.render()
+    } else {
+        document.querySelector('.wrapper').classList.add('container-fluid')
+        document.querySelector('.wrapper').classList.remove('container')
+        matrix.render()
+    }
+    modal.resize()
+})
 
 
-
-
-function createNewSnakeGame() {
-    //Matrix
+//Functions
+function createNewField() {
     matrix.create()
     matrix.render()
-    //Snake
-    snake.render()
-    modal.render()
-    //Start new game button
-    restartBtn = document.querySelector('.startNewGameBtn')
-    restartBtn.addEventListener('click', function () {
-        // createNewSnakeGame()
-        // startGame()
-    }, { once: true })
-
-    window.addEventListener('resize', function () {
-
-        if (window.innerWidth > 768) {
-            document.querySelector('.wrapper').classList.add('container')
-            document.querySelector('.wrapper').classList.remove('container-fluid')
-            matrix.render()
-        } else {
-            document.querySelector('.wrapper').classList.add('container-fluid')
-            document.querySelector('.wrapper').classList.remove('container')
-            matrix.render()
-        }
-
-        modal.resize()
-
-    })
-
 }
 
 function startGame() {
@@ -93,6 +95,7 @@ function startGame() {
             clearInterval(gameInterval)
             matrix.gameOverAnimation()
             gameplay.pause()
+            gameplay.currentTime = 0
             gameover.play()
             setTimeout(
                 () => {
@@ -103,6 +106,11 @@ function startGame() {
     }, 500)
 
     gameplay.play()
+}
+
+function reCreateNewField() {
+    matrix.clear()
+    createNewField()
 }
 
 // matrix.setCell(1, 2, 'fruit')

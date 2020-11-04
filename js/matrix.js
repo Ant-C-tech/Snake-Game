@@ -7,6 +7,8 @@ export default class Matrix {
         this.cellsArr = []
         this.rows = rows
         this.cols = cols
+
+        this.gameoverTimer
     }
 
     create() {
@@ -22,6 +24,13 @@ export default class Matrix {
 
             this.element.appendChild(div)
             this.cellsArr[i] = 'grass'
+        }
+    }
+
+    clear() {
+        const cellCollection = document.querySelectorAll('.field div')
+        for (let item of cellCollection) {
+            item.remove()
         }
     }
 
@@ -57,7 +66,7 @@ export default class Matrix {
         const imgCollection = document.querySelectorAll('.bg')
         for (let item of imgCollection) {
             const timer = _getRandomIntInclusive(0, 10000)
-            setTimeout(() => {
+            this.gameoverTimer = setTimeout(() => {
                 item.classList.add('animate__hinge')
             }, timer);
         }

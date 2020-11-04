@@ -40,8 +40,50 @@ body {
   width: 100%;
 }
 
+.modalGameOver-popupWindow {
+  width: 30%;
+}
+
 .gameOver__title {
   color: #9ccc65;
+  position: relative;
+}
+
+.gameOver__img {
+  display: block;
+  width: 20%;
+  margin: 0 auto;
+}
+
+.gameOver__img {
+  position: absolute;
+
+  bottom: 0;
+  /* transform: translate(0, 120%); */
+  z-index: 10;
+  animation: myfirst 10s linear infinite;
+  -webkit-animation: myfirst 10s linear infinite;
+}
+
+.startNewGameBtn {
+  margin-bottom: 80px;
+}
+
+@keyframes myfirst {
+  0% {
+    left: -25%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+@-webkit-keyframes myfirst {
+  0% {
+    left: -25%;
+  }
+  100% {
+    left: 100%;
+  }
 }
 
 @media screen and (max-width: 1200px) {
