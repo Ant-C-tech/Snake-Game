@@ -28,7 +28,8 @@ body {
 }
 
 .startBtn,
-.startNewGameBtn {
+.startNewGameBtn,
+.pauseBtn {
   border: none !important;
   background-color: #9ccc65 !important;
   color: #3f51b5;
@@ -66,7 +67,7 @@ body {
 }
 
 .startNewGameBtn {
-  margin-bottom: 80px;
+  margin-bottom: 120px;
 }
 
 @keyframes myfirst {

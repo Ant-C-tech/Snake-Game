@@ -6,7 +6,9 @@ import PopUp from './popUp.js'
 
 const gameField = document.querySelector('.field')
 const startBtn = document.querySelector('.startBtn')
+const pauseBtn = document.querySelector('.pauseBtn')
 let restartBtn
+let gameInterval
 
 //New modules
 const matrix = new Matrix(gameField)
@@ -25,11 +27,11 @@ const modal = new PopUp({
 
 //Music
 const gameplay = new Audio('https://ant-c-tech.github.io/Snake-Game/audio/gameplay.mp3')
-document.querySelector('#gameplay').innerHTML = '<audio><source src="https://ant-c-tech.github.io/Snake-Game/audio/gameplay.mp3"></audio>'
+// document.querySelector('#gameplay').innerHTML = '<audio><source src="https://ant-c-tech.github.io/Snake-Game/audio/gameplay.mp3"></audio>'
 gameplay.loop = true
 gameplay.volume = 1
 const gameover = new Audio('https://ant-c-tech.github.io/Snake-Game/audio/gameover.mp3')
-document.querySelector('#gameover').innerHTML = '<audio><source src="https://ant-c-tech.github.io/Snake-Game/audio/gameover.mp3"></audio>'
+// document.querySelector('#gameover').innerHTML = '<audio><source src="https://ant-c-tech.github.io/Snake-Game/audio/gameover.mp3"></audio>'
 gameover.volume = 0.4
 
 
@@ -58,14 +60,8 @@ document.onkeydown = function (event) {
 startBtn.addEventListener('click', startGame, { once: true })
 modal.render()
 restartBtn = document.querySelector('.startNewGameBtn')
-restartBtn.addEventListener('click', function () {
-    gameover.pause()
-    gameover.currentTime = 0
-    modal.hidePopup()
-    reCreateNewField()
-    snake.render()
-    startBtn.addEventListener('click', startGame, { once: true })
-})
+restartBtn.addEventListener('click', reStartGame)
+
 
 //Resize
 window.addEventListener('resize', function () {
@@ -89,7 +85,8 @@ function createNewField() {
 }
 
 function startGame() {
-    let gameInterval = setInterval(() => {
+    pauseBtn.addEventListener('click', pauseGame, { once: true })
+    gameInterval = setInterval(() => {
         snake.move()
         if (snake.alive === false) {
             clearInterval(gameInterval)
@@ -106,6 +103,21 @@ function startGame() {
     }, 500)
 
     gameplay.play()
+}
+
+function reStartGame() {
+    gameover.pause()
+    gameover.currentTime = 0
+    modal.hidePopup()
+    reCreateNewField()
+    snake.render()
+    startBtn.addEventListener('click', startGame, { once: true })
+}
+
+function pauseGame() {
+    gameplay.pause()
+    clearInterval(gameInterval)
+    startBtn.addEventListener('click', startGame, { once: true })
 }
 
 function reCreateNewField() {
