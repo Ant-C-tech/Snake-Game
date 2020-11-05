@@ -1,26 +1,33 @@
 body {
-  background-color: #bcaaa4;
+  background-image: url("../img/background.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  height: 100vh;
+  overflow-y: none;
+}
+
+p {
+  color: #3e2723;
+}
+
+a {
+  color: #558b2f;
 }
 
 .container {
-  padding-left: 130px;
-  padding-right: 130px;
+  padding: 20px 175px;
 }
 
 .field {
   display: flex;
   flex-wrap: wrap;
 
-  margin: 20px auto;
-
-  border-left: 2px ridge #3f51b5;
-  border-top: 2px ridge #3f51b5;
+  margin: 0 auto;
 }
 
 .field > div {
-  background-color: #dcedc8;
-  border-right: 2px ridge #3f51b5;
-  border-bottom: 2px ridge #3f51b5;
+  background-color: #fff9c4;
   padding: 5px;
   display: flex;
   justify-content: center;
@@ -30,9 +37,9 @@ body {
 .startBtn,
 .startNewGameBtn,
 .pauseBtn {
-  border: none !important;
+  border: 2px solid #3e2723 !important;
   background-color: #9ccc65 !important;
-  color: #3f51b5;
+  color: #3e2723;
   font-weight: bold;
 }
 
@@ -60,7 +67,6 @@ body {
   position: absolute;
 
   bottom: 0;
-  /* transform: translate(0, 120%); */
   z-index: 10;
   animation: myfirst 10s linear infinite;
   -webkit-animation: myfirst 10s linear infinite;
@@ -68,6 +74,12 @@ body {
 
 .startNewGameBtn {
   margin-bottom: 120px;
+}
+
+.thanks {
+  margin: 0 auto;
+  width: fit-content;
+  background-color: #fff9c4;
 }
 
 @keyframes myfirst {
@@ -89,8 +101,8 @@ body {
 
 @media screen and (max-width: 1200px) {
   .container {
-    padding-left: 20px;
-    padding-right: 20px;
+    padding-left: 40px;
+    padding-right: 40px;
   }
 }
 
@@ -102,18 +114,40 @@ body {
 }
 
 @media screen and (max-width: 768px) {
-  .container {
-    width: 100% !important;
-  }
-
   .field {
-    border-left: 1px ridge #3f51b5;
-    border-top: 1px ridge #3f51b5;
+    border-left: 1px ridge #8d6e63;
+    border-top: 1px ridge #8d6e63;
   }
 
   .field > div {
-    border-right: 1px ridge #3f51b5;
-    border-bottom: 1px ridge #3f51b5;
+    border-right: 1px ridge #8d6e63;
+    border-bottom: 1px ridge #8d6e63;
     padding: 3px;
+  }
+
+  .container-fluid {
+    padding: 20px 0px;
+  }
+}
+
+@media screen and (orientation: landscape) and (max-device-width: 1025px) {
+  html {
+    -webkit-transform: rotate(-90deg);
+    -moz-transform: rotate(-90deg);
+    -ms-transform: rotate(-90deg);
+    -o-transform: rotate(-90deg);
+    transform: rotate(-90deg);
+    -webkit-transform-origin: left top;
+    -moz-transform-origin: left top;
+    -ms-transform-origin: left top;
+    -o-transform-origin: left top;
+    transform-origin: left top;
+    width: 320px; /*Разрешение экрана iPhone*/
+    position: absolute;
+    top: 100%;
+    left: 0;
+  }
+  body {
+    height: 100vw;
   }
 }

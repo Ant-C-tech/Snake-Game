@@ -3,7 +3,10 @@
 import Matrix from './matrix.js'
 import Snake from './snake.js'
 import PopUp from './popUp.js'
+import Fruit from './fruit.js'
+import Wall from './wall.js'
 
+const gameSpace = document.querySelector('html')
 const gameField = document.querySelector('.field')
 const startBtn = document.querySelector('.startBtn')
 const pauseBtn = document.querySelector('.pauseBtn')
@@ -24,21 +27,28 @@ const modal = new PopUp({
     maskOpacity: '0.01',
     bgColor: '#795548'
 })
+const fruit = new Fruit(matrix, _getRandomIntInclusive(0, 20), _getRandomIntInclusive(0, 20))
+const wall = new Wall(matrix, _getRandomIntInclusive(0, 20), _getRandomIntInclusive(0, 20))
 
 //Music
 const gameplay = new Audio('https://ant-c-tech.github.io/Snake-Game/audio/gameplay.mp3')
-// document.querySelector('#gameplay').innerHTML = '<audio><source src="https://ant-c-tech.github.io/Snake-Game/audio/gameplay.mp3"></audio>'
 gameplay.loop = true
 gameplay.volume = 1
 const gameover = new Audio('https://ant-c-tech.github.io/Snake-Game/audio/gameover.mp3')
-// document.querySelector('#gameover').innerHTML = '<audio><source src="https://ant-c-tech.github.io/Snake-Game/audio/gameover.mp3"></audio>'
 gameover.volume = 0.4
 
+// Phone adoptation
+const mql = window.matchMedia("(orientation: landscape)");
+if (mql.matches && document.documentElement.clientWidth <= 1025) {
+    gameSpace.style.width = document.documentElement.clientHeight + 'px'
+}
 
 //=====================  Gameplay  ===========================
 // Game elements
 createNewField()
 snake.render()
+fruit.render()
+wall.render()
 
 // Game control
 document.onkeydown = function (event) {
@@ -61,10 +71,15 @@ startBtn.addEventListener('click', startGame, { once: true })
 modal.render()
 restartBtn = document.querySelector('.startNewGameBtn')
 restartBtn.addEventListener('click', reStartGame)
-
+//===================== /Gameplay  ===========================
 
 //Resize
 window.addEventListener('resize', function () {
+
+    if (mql.matches && document.documentElement.clientWidth <= 1025) {
+        gameSpace.style.width = document.documentElement.clientHeight + 'px'
+    }
+
     if (window.innerWidth > 768) {
         document.querySelector('.wrapper').classList.add('container')
         document.querySelector('.wrapper').classList.remove('container-fluid')
@@ -78,7 +93,7 @@ window.addEventListener('resize', function () {
 })
 
 
-//Functions
+//==========================  Functions  ====================================
 function createNewField() {
     matrix.create()
     matrix.render()
@@ -111,6 +126,8 @@ function reStartGame() {
     modal.hidePopup()
     reCreateNewField()
     snake.render()
+    fruit.render()
+    wall.render()
     startBtn.addEventListener('click', startGame, { once: true })
 }
 
@@ -125,4 +142,8 @@ function reCreateNewField() {
     createNewField()
 }
 
-// matrix.setCell(1, 2, 'fruit')
+function _getRandomIntInclusive(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
