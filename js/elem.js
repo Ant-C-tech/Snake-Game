@@ -2,14 +2,16 @@
 
 export default class Elem {
 
-    constructor(matrix, x, y) {
+    constructor(matrix, coords) {
         this.matrix = matrix
-        this.x = x
-        this.y = y
-        this.value = ''
+        this.coords = coords
+        this.value = []
     }
 
     render() {
-        this.matrix.setCell(this.x, this.y, this.value)
+        for (let i = 0; i < this.coords.length; i++) {
+            this.matrix.renderElement(this.coords[i][0], this.coords[i][1], this.value[i])
+        }
+
     }
 }

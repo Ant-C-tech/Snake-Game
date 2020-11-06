@@ -1,33 +1,50 @@
 'use strict'
 
-export default class Snake {
+import Elem from './elem.js'
 
-    constructor(matrix) {
+export default class Snake extends Elem {
+
+    constructor(matrix, coords) {
+        super(matrix, coords)
+
         this.matrix = matrix
-
-        this.direction
-        this.alive
-        this.x
-        this.y
-        this.animationDirect
         this.explosionPoint
-    }
 
-
-
-    render() {
         this.direction = 'right'
         this.alive = true
-        this.x = this.matrix.rows / 2
-        this.y = this.matrix.cols / 2
-        this.animationDirect = 270
+        this.animationDirect
 
-        this.matrix.setCell(this.x, this.y, {
+        this.valueCollection = [{
             name: 'snake head',
             src: 'img/snake.png',
             alt: 'snake head',
             direction: this.animationDirect,
-        })
+        }, {
+            name: 'snake body',
+            src: 'img/tennis-ball.png',
+            alt: 'snake body',
+            direction: 0,
+        },
+        {
+            name: 'snake tail',
+            src: 'img/tennis-ball.png',
+            alt: 'snake tail',
+            direction: 0,
+        }, {
+            name: 'explosion',
+            src: 'img/shockwave.png',
+            alt: 'explosion',
+            direction: 0,
+        },
+        {
+            name: 'grass',
+            src: 'img/grass.png',
+            alt: 'grass',
+            direction: 0,
+        },
+        ]
+
+        this.value = [this.valueCollection[0], this.valueCollection[1], this.valueCollection[1], this.valueCollection[2]]
     }
 
     move() {
@@ -35,54 +52,49 @@ export default class Snake {
             return false
         }
 
-        let lastX = this.x
-        let lastY = this.y
+        let snakeHead = this.coords[0].slice()
+        let snakeTail = this.coords[this.coords.length - 1].slice()
 
         switch (this.direction) {
             case 'right':
-                this.x++
+                snakeHead[0]++
                 this.animationDirect = 270
+                console.log("Snake -> move -> this.animationDirect", this.animationDirect)
                 break
             case 'left':
-                this.x--
+                snakeHead[0]--
                 this.animationDirect = 90
+                console.log("Snake -> move -> this.animationDirect", this.animationDirect)
                 break
             case 'bottom':
-                this.y++
+                snakeHead[1]++
                 this.animationDirect = 0
+                console.log("Snake -> move -> this.animationDirect", this.animationDirect)
                 break
             case 'top':
-                this.y--
+                snakeHead[1]--
                 this.animationDirect = 180
+                console.log("Snake -> move -> this.animationDirect", this.animationDirect)
                 break
         }
 
-        if (!_isAlive(this.x, this.y, this.matrix.rows, this.matrix.cols)) {
+        if (!_isAlive(snakeHead[0], snakeHead[1], this.matrix.rows, this.matrix.cols)) {
 
-            this.matrix.setCell(lastX, lastY, {
-                name: 'explosion',
-                src: 'img/shockwave.png',
-                alt: 'explosion',
-                direction: 0,
-            })
+            this.value = [this.valueCollection[3], this.valueCollection[1], this.valueCollection[1], this.valueCollection[2]]
 
             this.alive = false
             return false
         }
 
-        this.matrix.setCell(lastX, lastY, {
-            name: 'grass',
-            src: 'img/grass.png',
-            alt: 'grass',
-            direction: 0,
-        })
+        this.coords.pop()
+        this.coords.unshift([snakeHead[0], snakeHead[1]])
+        this.matrix.renderElement(snakeTail[0], snakeTail[1], this.valueCollection[4]) // Clear last tail position
 
-        this.matrix.setCell(this.x, this.y, {
-            name: 'snake head',
-            src: 'img/snake.png',
-            alt: 'snake head',
-            direction: this.animationDirect,
-        })
+    }
+
+    setStartSettings() {
+        this.value = [this.valueCollection[0], this.valueCollection[1], this.valueCollection[1], this.valueCollection[2]]
+        this.coords = [[10, 10], [9, 10], [8, 10], [7, 10]]
     }
 
 }

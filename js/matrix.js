@@ -4,7 +4,7 @@ export default class Matrix {
 
     constructor(element, rows = 20, cols = 20) {
         this.element = element
-        this.cellsArr = []
+        // this.cellsArr = []
         this.rows = rows
         this.cols = cols
 
@@ -23,7 +23,7 @@ export default class Matrix {
             div.appendChild(bg)
 
             this.element.appendChild(div)
-            this.cellsArr[i] = 'grass'
+            // this.cellsArr[i] = 'grass'
         }
     }
 
@@ -53,14 +53,14 @@ export default class Matrix {
         return this.cellsArr[cellNum]
     }
 
-    setCell(x, y, val) {
+    renderElement(x, y, val) {
         const cellNum = _calcElement(x, y, this.cols)
-        this.cellsArr[cellNum] = val.name
 
         this.element.childNodes[cellNum].firstChild.setAttribute('src', val.src)
         this.element.childNodes[cellNum].firstChild.setAttribute('alt', val.alt)
         this.element.childNodes[cellNum].firstChild.style.transform = `rotate(${val.direction}deg)`
     }
+
 
     gameOverAnimation() {
         const imgCollection = document.querySelectorAll('.bg')

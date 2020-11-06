@@ -48,6 +48,14 @@ a {
   width: 100%;
 }
 
+.bg[alt="snake body"] {
+  width: 80%;
+}
+
+.bg[alt="snake tail"] {
+  width: 55%;
+}
+
 .modalGameOver-popupWindow {
   width: 30%;
 }

@@ -15,7 +15,7 @@ let gameInterval
 
 //New modules
 const matrix = new Matrix(gameField)
-const snake = new Snake(matrix)
+const snake = new Snake(matrix, [[10, 10], [9, 10], [8, 10], [7, 10]])
 const modal = new PopUp({
     container: 'modalGameOver',
     content: `<div class="gameOver mb-3">
@@ -27,8 +27,8 @@ const modal = new PopUp({
     maskOpacity: '0.01',
     bgColor: '#795548'
 })
-const fruit = new Fruit(matrix, _getRandomIntInclusive(0, 20), _getRandomIntInclusive(0, 20))
-const wall = new Wall(matrix, _getRandomIntInclusive(0, 20), _getRandomIntInclusive(0, 20))
+const fruit = new Fruit(matrix, [[_getRandomIntInclusive(0, 20), _getRandomIntInclusive(0, 20)]])
+const wall = new Wall(matrix, [[_getRandomIntInclusive(0, 20), _getRandomIntInclusive(0, 20)]])
 
 //Music
 const gameplay = new Audio('https://ant-c-tech.github.io/Snake-Game/audio/gameplay.mp3')
@@ -103,6 +103,7 @@ function startGame() {
     pauseBtn.addEventListener('click', pauseGame, { once: true })
     gameInterval = setInterval(() => {
         snake.move()
+        snake.render()
         if (snake.alive === false) {
             clearInterval(gameInterval)
             matrix.gameOverAnimation()
@@ -125,6 +126,7 @@ function reStartGame() {
     gameover.currentTime = 0
     modal.hidePopup()
     reCreateNewField()
+    snake.setStartSettings()
     snake.render()
     fruit.render()
     wall.render()

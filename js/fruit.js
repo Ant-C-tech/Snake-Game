@@ -4,8 +4,8 @@ import Elem from './elem.js'
 
 export default class Fruit extends Elem {
 
-    constructor(matrix, x, y) {
-        super(matrix, x, y)
+    constructor(matrix, coords) {
+        super(matrix, coords)
         this.valueCollection = [{
             name: 'apple',
             src: 'img/apple.png',
@@ -36,7 +36,7 @@ export default class Fruit extends Elem {
             direction: 0,
         },
         ]
-        this.value = this.valueCollection[_getRandomIntInclusive(0, 4)]
+        this.value = [this.valueCollection[_getRandomIntInclusive(0, 4)]]
     }
 
 }
