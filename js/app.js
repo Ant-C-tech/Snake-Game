@@ -13,9 +13,12 @@ const pauseBtn = document.querySelector('.pauseBtn')
 let restartBtn
 let gameInterval
 
+let snakeCoords = []
+let snakeLength = 4
+
 //New modules
 const matrix = new Matrix(gameField)
-const snake = new Snake(matrix, [[10, 10], [9, 10], [8, 10], [7, 10]])
+const snake = new Snake(matrix, snakeCoords, snakeLength)
 const modal = new PopUp({
     container: 'modalGameOver',
     content: `<div class="gameOver mb-3">
@@ -27,8 +30,8 @@ const modal = new PopUp({
     maskOpacity: '0.01',
     bgColor: '#795548'
 })
-const fruit = new Fruit(matrix, [[_getRandomIntInclusive(0, 20), _getRandomIntInclusive(0, 20)]])
-const wall = new Wall(matrix, [[_getRandomIntInclusive(0, 20), _getRandomIntInclusive(0, 20)]])
+const fruit = new Fruit(matrix, [[_getRandomIntInclusive(1, 20), _getRandomIntInclusive(1, 20)]])
+const wall = new Wall(matrix, [[_getRandomIntInclusive(1, 20), _getRandomIntInclusive(1, 20)]])
 
 //Music
 const gameplay = new Audio('https://ant-c-tech.github.io/Snake-Game/audio/gameplay.mp3')
@@ -46,24 +49,35 @@ if (mql.matches && document.documentElement.clientWidth <= 1025) {
 //=====================  Gameplay  ===========================
 // Game elements
 createNewField()
+snake.setStartSettings()
 snake.render()
 fruit.render()
 wall.render()
+console.log(matrix.cellsArr);
+
 
 // Game control
 document.onkeydown = function (event) {
     switch (event.key) {
         case 'ArrowRight':
-            snake.direction = 'right'
+            if (snake.direction != 'left') {
+                snake.direction = 'right'
+            }
             break
         case 'ArrowLeft':
-            snake.direction = 'left'
+            if (snake.direction != 'right') {
+                snake.direction = 'left'
+            }
             break
         case 'ArrowDown':
-            snake.direction = 'bottom'
+            if (snake.direction != 'top') {
+                snake.direction = 'bottom'
+            }
             break
         case 'ArrowUp':
-            snake.direction = 'top'
+            if (snake.direction != 'bottom') {
+                snake.direction = 'top'
+            }
             break
     }
 }
@@ -104,6 +118,7 @@ function startGame() {
     gameInterval = setInterval(() => {
         snake.move()
         snake.render()
+        console.log(matrix.cellsArr);
         if (snake.alive === false) {
             clearInterval(gameInterval)
             matrix.gameOverAnimation()
@@ -149,3 +164,4 @@ function _getRandomIntInclusive(min, max) {
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
+

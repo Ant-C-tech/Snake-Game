@@ -4,21 +4,20 @@ import Elem from './elem.js'
 
 export default class Snake extends Elem {
 
-    constructor(matrix, coords) {
+    constructor(matrix, coords, length) {
         super(matrix, coords)
 
         this.matrix = matrix
-        this.explosionPoint
+        this.length = length
 
         this.direction = 'right'
         this.alive = true
-        this.animationDirect
 
         this.valueCollection = [{
             name: 'snake head',
             src: 'img/snake.png',
             alt: 'snake head',
-            direction: this.animationDirect,
+            direction: 270,
         }, {
             name: 'snake body',
             src: 'img/tennis-ball.png',
@@ -44,7 +43,7 @@ export default class Snake extends Elem {
         },
         ]
 
-        this.value = [this.valueCollection[0], this.valueCollection[1], this.valueCollection[1], this.valueCollection[2]]
+        this.value = []
     }
 
     move() {
@@ -58,23 +57,19 @@ export default class Snake extends Elem {
         switch (this.direction) {
             case 'right':
                 snakeHead[0]++
-                this.animationDirect = 270
-                console.log("Snake -> move -> this.animationDirect", this.animationDirect)
+                this.valueCollection[0].direction = 270
                 break
             case 'left':
                 snakeHead[0]--
-                this.animationDirect = 90
-                console.log("Snake -> move -> this.animationDirect", this.animationDirect)
+                this.valueCollection[0].direction = 90
                 break
             case 'bottom':
                 snakeHead[1]++
-                this.animationDirect = 0
-                console.log("Snake -> move -> this.animationDirect", this.animationDirect)
+                this.valueCollection[0].direction = 0
                 break
             case 'top':
                 snakeHead[1]--
-                this.animationDirect = 180
-                console.log("Snake -> move -> this.animationDirect", this.animationDirect)
+                this.valueCollection[0].direction = 180
                 break
         }
 
@@ -93,8 +88,19 @@ export default class Snake extends Elem {
     }
 
     setStartSettings() {
-        this.value = [this.valueCollection[0], this.valueCollection[1], this.valueCollection[1], this.valueCollection[2]]
-        this.coords = [[10, 10], [9, 10], [8, 10], [7, 10]]
+        this.valueCollection[0].direction = 270
+        this.createSnake()
+    }
+
+    createSnake() {
+        this.coords.push([this.length, 10])
+        this.value.push(this.valueCollection[0])
+        for (let i = 1; i < this.length - 1; i++) {
+            this.coords.push([this.length - i, 10])
+            this.value.push(this.valueCollection[1])
+        }
+        this.coords.push([1, 10])
+        this.value.push(this.valueCollection[2])
     }
 
 }

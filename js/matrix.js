@@ -4,7 +4,7 @@ export default class Matrix {
 
     constructor(element, rows = 20, cols = 20) {
         this.element = element
-        // this.cellsArr = []
+        this.cellsArr = []
         this.rows = rows
         this.cols = cols
 
@@ -23,7 +23,7 @@ export default class Matrix {
             div.appendChild(bg)
 
             this.element.appendChild(div)
-            // this.cellsArr[i] = 'grass'
+            this.cellsArr[i] = 'grass'
         }
     }
 
@@ -48,9 +48,10 @@ export default class Matrix {
         }
     }
 
-    getCell(x, y) {
+    getCell(x, y, val) {
         const cellNum = _calcElement(x, y, this.cols)
-        return this.cellsArr[cellNum]
+        // return this.cellsArr[cellNum]
+        this.cellsArr[cellNum] = val
     }
 
     renderElement(x, y, val) {
@@ -59,6 +60,8 @@ export default class Matrix {
         this.element.childNodes[cellNum].firstChild.setAttribute('src', val.src)
         this.element.childNodes[cellNum].firstChild.setAttribute('alt', val.alt)
         this.element.childNodes[cellNum].firstChild.style.transform = `rotate(${val.direction}deg)`
+
+        this.getCell(x, y, val.name)
     }
 
 
