@@ -2,9 +2,8 @@
 
 export default class Elem {
 
-    constructor(matrix, coords) {
+    constructor(matrix) {
         this.matrix = matrix
-        this.coords = coords
         this.value = []
     }
 
@@ -13,5 +12,11 @@ export default class Elem {
             this.matrix.renderElement(this.coords[i][0], this.coords[i][1], this.value[i])
         }
 
+    }
+
+    getRandomIntInclusive(min, max) {
+        min = Math.ceil(min);
+        max = Math.floor(max);
+        return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 }

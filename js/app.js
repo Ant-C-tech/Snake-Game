@@ -13,12 +13,76 @@ const pauseBtn = document.querySelector('.pauseBtn')
 let restartBtn
 let gameInterval
 
-let snakeCoords = []
-let snakeLength = 4
+//Graphics
+const matrixElem = {
+    name: 'grass',
+    src: 'img/grass.png',
+    alt: 'grass',
+    direction: 0,
+}
+const snakeElem = [{
+    name: 'snake',
+    src: 'img/snake.png',
+    alt: 'snake head',
+    direction: 270,
+}, {
+    name: 'snake',
+    src: 'img/tennis-ball.png',
+    alt: 'snake body',
+    direction: 0,
+},
+{
+    name: 'snake',
+    src: 'img/tennis-ball.png',
+    alt: 'snake tail',
+    direction: 0,
+}, {
+    name: 'snake',
+    src: 'img/shockwave.png',
+    alt: 'explosion',
+    direction: 0,
+},
+]
+const wallElem = {
+    name: 'wall',
+    src: 'img/brick-wall.png',
+    alt: 'wall',
+    direction: 0,
+}
+const fruitElem = [{
+    name: 'fruit',
+    src: 'img/apple.png',
+    alt: 'apple',
+    direction: 0,
+}, {
+    name: 'fruit',
+    src: 'img/pineapple.png',
+    alt: 'pineapple',
+    direction: 0,
+},
+{
+    name: 'fruit',
+    src: 'img/watermelon.png',
+    alt: 'watermelon',
+    direction: 0,
+},
+{
+    name: 'fruit',
+    src: 'img/cherry.png',
+    alt: 'cherry',
+    direction: 0,
+},
+{
+    name: 'fruit',
+    src: 'img/bananas.png',
+    alt: 'bananas',
+    direction: 0,
+},
+]
 
 //New modules
-const matrix = new Matrix(gameField)
-const snake = new Snake(matrix, snakeCoords, snakeLength)
+const matrix = new Matrix(gameField, matrixElem)
+const snake = new Snake(matrix, snakeElem, matrixElem)
 const modal = new PopUp({
     container: 'modalGameOver',
     content: `<div class="gameOver mb-3">
@@ -30,8 +94,8 @@ const modal = new PopUp({
     maskOpacity: '0.01',
     bgColor: '#795548'
 })
-const fruit = new Fruit(matrix, [[_getRandomIntInclusive(1, 20), _getRandomIntInclusive(1, 20)]])
-const wall = new Wall(matrix, [[_getRandomIntInclusive(1, 20), _getRandomIntInclusive(1, 20)]])
+const fruit = new Fruit(matrix, fruitElem)
+const wall = new Wall(matrix, wallElem)
 
 //Music
 const gameplay = new Audio('https://ant-c-tech.github.io/Snake-Game/audio/gameplay.mp3')
@@ -49,11 +113,16 @@ if (mql.matches && document.documentElement.clientWidth <= 1025) {
 //=====================  Gameplay  ===========================
 // Game elements
 createNewField()
-snake.setStartSettings()
+snake.setStartPosition()
 snake.render()
+for (let i = 0; i < 3; i++) {
+    wall.setStartPosition()
+    wall.render()
+}
+
+fruit.setStartPosition()
 fruit.render()
-wall.render()
-console.log(matrix.cellsArr);
+// console.log(matrix.cellsArr);
 
 
 // Game control
@@ -118,7 +187,7 @@ function startGame() {
     gameInterval = setInterval(() => {
         snake.move()
         snake.render()
-        console.log(matrix.cellsArr);
+        // console.log(matrix.cellsArr);
         if (snake.alive === false) {
             clearInterval(gameInterval)
             matrix.gameOverAnimation()
@@ -141,10 +210,14 @@ function reStartGame() {
     gameover.currentTime = 0
     modal.hidePopup()
     reCreateNewField()
-    snake.setStartSettings()
+    snake.setStartPosition()
     snake.render()
+    for (let i = 0; i < 3; i++) {
+        wall.setStartPosition()
+        wall.render()
+    }
+    fruit.setStartPosition()
     fruit.render()
-    wall.render()
     startBtn.addEventListener('click', startGame, { once: true })
 }
 
@@ -159,9 +232,4 @@ function reCreateNewField() {
     createNewField()
 }
 
-function _getRandomIntInclusive(min, max) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-}
 

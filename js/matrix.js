@@ -2,11 +2,12 @@
 
 export default class Matrix {
 
-    constructor(element, rows = 20, cols = 20) {
+    constructor(element, matrixElem) {
         this.element = element
         this.cellsArr = []
-        this.rows = rows
-        this.cols = cols
+        this.rows = 20
+        this.cols = 20
+        this.matrixElem = matrixElem
 
         this.gameoverTimer
     }
@@ -17,13 +18,13 @@ export default class Matrix {
 
             let bg = document.createElement('img')
             bg.classList.add('animate__animated')
-            bg.setAttribute('src', 'img/grass.png')
-            bg.setAttribute('alt', 'grass')
+            bg.setAttribute('src', this.matrixElem.src)
+            bg.setAttribute('alt', this.matrixElem.alt)
             bg.classList.add('bg')
             div.appendChild(bg)
 
             this.element.appendChild(div)
-            this.cellsArr[i] = 'grass'
+            this.cellsArr[i] = this.matrixElem.name
         }
     }
 
@@ -48,10 +49,14 @@ export default class Matrix {
         }
     }
 
-    getCell(x, y, val) {
+    setCell(x, y, val) {
         const cellNum = _calcElement(x, y, this.cols)
-        // return this.cellsArr[cellNum]
         this.cellsArr[cellNum] = val
+    }
+
+    getCell(coords) {
+        const cellNum = _calcElement(coords[0], coords[1], this.cols)
+        return this.cellsArr[cellNum]
     }
 
     renderElement(x, y, val) {
@@ -61,7 +66,7 @@ export default class Matrix {
         this.element.childNodes[cellNum].firstChild.setAttribute('alt', val.alt)
         this.element.childNodes[cellNum].firstChild.style.transform = `rotate(${val.direction}deg)`
 
-        this.getCell(x, y, val.name)
+        this.setCell(x, y, val.name)
     }
 
 

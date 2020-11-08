@@ -4,46 +4,17 @@ import Elem from './elem.js'
 
 export default class Snake extends Elem {
 
-    constructor(matrix, coords, length) {
-        super(matrix, coords)
-
-        this.matrix = matrix
-        this.length = length
+    constructor(matrix, snakeElem, matrixElem) {
+        super(matrix)
 
         this.direction = 'right'
         this.alive = true
 
-        this.valueCollection = [{
-            name: 'snake head',
-            src: 'img/snake.png',
-            alt: 'snake head',
-            direction: 270,
-        }, {
-            name: 'snake body',
-            src: 'img/tennis-ball.png',
-            alt: 'snake body',
-            direction: 0,
-        },
-        {
-            name: 'snake tail',
-            src: 'img/tennis-ball.png',
-            alt: 'snake tail',
-            direction: 0,
-        }, {
-            name: 'explosion',
-            src: 'img/shockwave.png',
-            alt: 'explosion',
-            direction: 0,
-        },
-        {
-            name: 'grass',
-            src: 'img/grass.png',
-            alt: 'grass',
-            direction: 0,
-        },
-        ]
+        this.valueCollection = snakeElem
+        this.matrixElem = matrixElem
 
-        this.value = []
+        this.value
+        this.coords
     }
 
     move() {
@@ -73,7 +44,7 @@ export default class Snake extends Elem {
                 break
         }
 
-        if (!_isAlive(snakeHead[0], snakeHead[1], this.matrix.rows, this.matrix.cols)) {
+        if (!_isAlive(snakeHead[0], snakeHead[1], this.matrix.rows, this.matrix.cols) || this.matrix.getCell([snakeHead[0], snakeHead[1]]) === 'wall') {
 
             this.value = [this.valueCollection[3], this.valueCollection[1], this.valueCollection[1], this.valueCollection[2]]
 
@@ -81,26 +52,22 @@ export default class Snake extends Elem {
             return false
         }
 
+        if (this.matrix.getCell([snakeHead[0], snakeHead[1]]) === 'fruit') {
+            console.log('Niam!!!');
+        }
+
         this.coords.pop()
         this.coords.unshift([snakeHead[0], snakeHead[1]])
-        this.matrix.renderElement(snakeTail[0], snakeTail[1], this.valueCollection[4]) // Clear last tail position
+        this.matrix.renderElement(snakeTail[0], snakeTail[1], this.matrixElem) // Clear last tail position
 
     }
 
-    setStartSettings() {
+    setStartPosition() {
+        this.value = [this.valueCollection[0], this.valueCollection[1], this.valueCollection[1], this.valueCollection[2]]
+        this.coords = [[4, 10], [3, 10], [2, 10], [1, 10]]
+        this.alive = true
         this.valueCollection[0].direction = 270
-        this.createSnake()
-    }
-
-    createSnake() {
-        this.coords.push([this.length, 10])
-        this.value.push(this.valueCollection[0])
-        for (let i = 1; i < this.length - 1; i++) {
-            this.coords.push([this.length - i, 10])
-            this.value.push(this.valueCollection[1])
-        }
-        this.coords.push([1, 10])
-        this.value.push(this.valueCollection[2])
+        this.direction = 'right'
     }
 
 }
