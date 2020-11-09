@@ -53,7 +53,7 @@ export default class Snake extends Elem {
         }
 
         if (this.matrix.getCell([snakeHead[0], snakeHead[1]]) === 'fruit') {
-            console.log('Niam!!!');
+            this.eatFruit()
         }
 
         this.coords.pop()
@@ -68,6 +68,10 @@ export default class Snake extends Elem {
         this.alive = true
         this.valueCollection[0].direction = 270
         this.direction = 'right'
+    }
+
+    eatFruit() {
+        console.log('Niam!!!');
     }
 
 }
